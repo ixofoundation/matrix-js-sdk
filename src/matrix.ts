@@ -171,3 +171,5 @@ export function createRoomWidgetClient(
 ): MatrixClient {
     return new RoomWidgetClient(widgetApi, capabilities, roomId, amendClientOpts(opts));
 }
+
+export * from "./crypto/crypto"; // exporting to get setCrypto for easy shim injection

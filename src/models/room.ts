@@ -66,6 +66,7 @@ import { IStateEventWithRoomId } from "../@types/search";
 import { RelationsContainer } from "./relations-container";
 import { ReadReceipt, synthesizeReceipt } from "./read-receipt";
 import { isPollEvent, Poll, PollEvent } from "./poll";
+import { promiseAllSettled } from "../utils/misc";
 
 // These constants are used as sane defaults when the homeserver doesn't support
 // the m.room_versions capability. In practice, KNOWN_SAFE_ROOM_VERSION should be
@@ -551,7 +552,7 @@ export class Room extends ReadReceipt<RoomEmittedEvents, RoomEventHandlerMap> {
             .reverse()
             .map((event) => this.client.decryptEventIfNeeded(event, { isRetry: true }));
 
-        await Promise.allSettled(decryptionPromises);
+        await promiseAllSettled(decryptionPromises);
     }
 
     /**
@@ -569,7 +570,7 @@ export class Room extends ReadReceipt<RoomEmittedEvents, RoomEventHandlerMap> {
             .reverse()
             .map((event) => this.client.decryptEventIfNeeded(event, { isRetry: true }));
 
-        await Promise.allSettled(decryptionPromises);
+        await promiseAllSettled(decryptionPromises);
     }
 
     /**

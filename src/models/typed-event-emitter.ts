@@ -17,6 +17,8 @@ limitations under the License.
 // eslint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
+import { promiseAllSettled } from "../utils/misc";
+
 /** Events emitted by EventEmitter itself */
 export enum EventEmitterEvents {
     NewListener = "newListener",
@@ -102,7 +104,7 @@ export class TypedEventEmitter<
     public async emitPromised<T extends Events>(event: T, ...args: Parameters<Arguments[T]>): Promise<boolean>;
     public async emitPromised<T extends Events>(event: T, ...args: any[]): Promise<boolean> {
         const listeners = this.listeners(event);
-        return Promise.allSettled(listeners.map((l) => l(...args))).then(() => {
+        return promiseAllSettled(listeners.map((l) => l(...args))).then(() => {
             return listeners.length > 0;
         });
     }

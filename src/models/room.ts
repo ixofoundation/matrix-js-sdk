@@ -71,6 +71,7 @@ import { compareEventOrdering } from "./compare-event-ordering.ts";
 import * as utils from "../utils.ts";
 import { KnownMembership, Membership } from "../@types/membership.ts";
 import { Capabilities, IRoomVersionsCapability, RoomVersionStability } from "../serverCapabilities.ts";
+import { promiseAllSettled } from "../utils/misc.ts";
 
 // These constants are used as sane defaults when the homeserver doesn't support
 // the m.room_versions capability. In practice, KNOWN_SAFE_ROOM_VERSION should be
@@ -558,7 +559,7 @@ export class Room extends ReadReceipt<RoomEmittedEvents, RoomEventHandlerMap> {
             .reverse()
             .map((event) => this.client.decryptEventIfNeeded(event));
 
-        await Promise.allSettled(decryptionPromises);
+        await promiseAllSettled(decryptionPromises);
     }
 
     /**
@@ -576,7 +577,7 @@ export class Room extends ReadReceipt<RoomEmittedEvents, RoomEventHandlerMap> {
             .reverse()
             .map((event) => this.client.decryptEventIfNeeded(event));
 
-        await Promise.allSettled(decryptionPromises);
+        await promiseAllSettled(decryptionPromises);
     }
 
     /**
